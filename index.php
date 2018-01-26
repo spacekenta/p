@@ -1,12 +1,25 @@
 <?php
-$d = new Paiza();
+/*
+ */
+
+$p = new Paiza();
+$p->init();
 
 class Paiza
 {
+    public $k;
+    public $s;
+    public $t;
+
     function __construct() {
         $STDIN = fopen('./stdin.txt', 'r');
-        list($this->o_y, $this->s, $this->theta) = preg_split('/ /', chop(fgets($STDIN)));
-        list($this->x, $this->y, $this->a) = preg_split('/ /', chop(fgets($STDIN)));
+        list($this->k, $this->s, $this->t) = preg_split('/ /', chop(fgets($STDIN)));
+    }
+
+    public function init() {
+        $result = '';
+
+        echo $result;
     }
 }
 
