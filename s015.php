@@ -12,7 +12,6 @@ $p->init();
 
 class Paiza
 {
-    public $str = 'ABC';
     public $k;
     public $s;
     public $t;
@@ -23,27 +22,24 @@ class Paiza
     }
 
     public function init() {
-        $result = '';
-        $level_str_list = array();
-        $level_str_list[0] = '';
-        $char_list = preg_split('//u', $this->str, -1, PREG_SPLIT_NO_EMPTY);
-
-        for ($level = 1; $level <= $this->k; $level++) {
-            $level_str = join($level_str_list[$level - 1], $char_list);
-            $level_str_list[$level] = $level_str;
-        }
-
+        $text = $this->getStr($this->k);
         $start = $this->s - 1;
         $end = $this->t;
         $result = mb_substr(
-            $level_str_list[$this->k],
+            $text,
             $start,
             $end - $start
         );
 
         echo $result;
     }
-}
 
+    private function getStr($lv) {
+        if ($lv === 0) {
+            return '';
+        }
+        return join($this->getStr($lv - 1), array('A','B','C'));
+    }
+}
 ?>
 
