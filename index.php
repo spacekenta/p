@@ -1,28 +1,20 @@
 <?php
 /*
  */
-
 $p = new Paiza();
 $p->init();
 
 class Paiza
 {
-    public $a;
-    public $b;
-
+    public $m;
+    public $n;
     function __construct() {
-        $STDIN = fopen('./stdin.txt', 'r');
-        list($this->a, $this->b) = preg_split('/ /', chop(fgets($STDIN)));
+        $this->STDIN = fopen('./stdin.txt', 'r');
+        list($this->m, $this->n) = preg_split('/ /', chop(fgets($this->STDIN)));
     }
 
     public function init() {
-        $result = 'eq';
-
-        if ($this->a < $this->b) {
-            $result = $this->b;
-        } else if ($this->a > $this->b) {
-            $result = $this->a;
-        }
+        $result = '';
 
         echo $result;
     }
