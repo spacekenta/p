@@ -11,7 +11,7 @@ class Paiza
     public $b;
 
     function __construct() {
-        $STDIN = fopen('./stdin.txt', 'r');
+        $STDIN = fopen('./d002.txt', 'r');
         list($this->a, $this->b) = preg_split('/ /', chop(fgets($STDIN)));
     }
 
