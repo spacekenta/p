@@ -3,9 +3,16 @@ ini_set('memory_limit', '2048M');
 $STDIN = fopen('./s015.txt', 'r');
 list($k, $s, $t) = preg_split('/ /', trim(fgets($STDIN)));
 
-
+$t0 = microtime();
 $p = getBlockList($k);
-echo getTargetText($k, $p, $s, $t) . "\n";
+
+$t1 = microtime();
+$res = getTargetText($k, $p, $s, $t) . "\n";
+
+$t2 = microtime();
+echo $res;
+echo $t1 - $t0 . "\n";
+echo $t2 - $t1 . "\n";
 exit;
 $text = getBlockText($k, $p);
 echo substr($text , ($s - 1), $t - ($s - 1)) . "\n";

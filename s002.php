@@ -1,6 +1,6 @@
 <?php
 /*
- * 回答に至らず
+ * 大規模データでタイムアウト
  */
 $p = new Paiza();
 $p->init();
@@ -27,7 +27,7 @@ class Paiza
     );
 
     function __construct() {
-        $this->STDIN = fopen('./stdin.txt', 'r');
+        $this->STDIN = fopen('./s002.txt', 'r');
         list($this->m, $this->n) = preg_split('/ /', chop(fgets($this->STDIN)));
 
         $this->setFields();
@@ -37,98 +37,66 @@ class Paiza
 
     public function init() {
         $result = '';
+        $que = array();
 
-        // ゴールに着くまで繰り返し
-        while (1) {
-            // 位置の初期化 
-            $this->resetPos();
+        $pos = array(
+            'x'   => $this->sposx,
+            'y'   => $this->sposy,
+            'val' => $this->fields[$this->sposy][$this->sposx],
+            'count' => 0,
+            'ref' => array(),
+        );
+        $que[] = $pos;
 
-            // 進路確認
-            $res = $this->searchRoot();
+        while ($q = array_shift($que)) {
 
-            if (array_search(true, $res) == false) {
-                // 確認先の進路に進行可能なマスがない場合は終了
-            } else {
-                // 進行可能なマスがある場合は記録を残して進む
+            if ($q['val'] === 'g') {
+                // gだったら即終了
+                break;
             }
-
-        }
-
-        echo $result;
-    }
-
-    public function resetPos() {
-        $this->posx = $this->sposx;
-        $this->posy = $this->sposy;
-        $this->root_list = array($this->sposx . ',' . $this->sposy);
-    }
-
-    public function searchRoot() {
-        while (1) {
-            $this->resetPos();
-
-
-            foreach ($this->move as $k => $m) {
-                $check_pos[$k] = $this->checkPos($m[0], $m[1]);
-            }
-
-        }
-    }
-
-    public function movePos($check_pos) {
-        foreach ($check_pos as $v) {
-            if ()
-        }
-
-
-
-        return 0;
-
-        $root_list = array();
-
-        while (1) {
-            $this->posx = $this->sposx;
-            $this->posy = $this->sposy;
-
 
             foreach ($this->move as $m) {
-                $check_pos = $this->checkPos($m[0], $m[1]);
+                $x = $q['x'] + $m[0];
+                $y = $q['y'] + $m[1];
 
-                $root_list[] = array(
-                    'x'   => $this->posx + $m[0],
-                    'y'   => $this->posy + $m[1],
-                    'res' => $check_pos,
-                );
-
-
-                if ($check_pos == false) {
+                // 未定義の場所には行かない
+                if (!isset($this->fields[$y][$x])) {
                     continue;
-                } else if ($this->fields[$this->posy + $m[1]][$this->posx + $m[0]] == 'g') {
-                    return $root_list;
-                } else {
-                    $this->posx = $this->posx + $m[0];
-                    $this->posy = $this->posy + $m[1];
                 }
+
+                // 値が1の場所には行かない
+                if ($this->fields[$y][$x] == 1) {
+                    continue;
+                }
+
+                // 値がsの場所には行かない
+                if ($this->fields[$y][$x] == 's') {
+                    continue;
+                }
+
+                // 既に行った場所には行かない
+                if (array_search($y . ',' . $x, $q['ref']) != false) {
+                    continue;
+                }
+
+                // 次に移動する場所を配列へ
+                $pos = array(
+                    'x'     => $x,
+                    'y'     => $y,
+                    'val'   => $this->fields[$y][$x],
+                    'count' => $q['count'] + 1,
+                );
+                $pos['ref'] = $q['ref'];
+                $pos['ref'][] = $q['y'] . ',' . $q['x'];
+                $que[] = $pos;
             }
-
-
-        }
-    }
-
-    public function checkPos($x, $y) {
-        $px = $this->posx;
-        $py = $this->posy;
-        $pos = $px . ',' . $py;
-
-        if (!isset($this->fields[$py + $y][$px + $x])) {
-            return false;
-        } else if ($this->fields[$py + $y][$px + $x] === 1) {
-            return false;
-        } else if (array_search($pos, $this->root_list) == true) {
-            return false;
         }
 
-        return true;
+        if ($q['count'] > 0) {
+            echo $q['count'];
+        } else {
+            echo 'Fail';
+        }
     }
 
     public function setFields() {

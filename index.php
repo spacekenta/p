@@ -1,6 +1,7 @@
 <?php
 /*
  */
+
 $p = new Paiza();
 $p->init();
 
