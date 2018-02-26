@@ -13,12 +13,12 @@ class Paiza
     public $a;
 
     function __construct() {
-        $this->STDIN = fopen('./s004.txt', 'r');
+        $this->STDIN = fopen('./stdin.txt', 'r');
         $this->a = str_split(chop(fgets($this->STDIN)));
     }
 
     public function init() {
-        $result = '';
+        $result = date('Y-m-d H:i:s');
         echo $result;
     }
 
